@@ -111,6 +111,7 @@ class BHVideoStitcher: NSObject {
         let op = NSURL(fileURLWithPath: NSTemporaryDirectory().appending("/\(UUID().uuidString).mp4"))
         exportSession!.outputURL = op as URL
         exportSession!.outputFileType = AVFileTypeMPEG4
+        exportSession!.shouldOptimizeForNetworkUse = true
         
         // export the video
         exportSession?.exportAsynchronously(completionHandler: { 
