@@ -10,8 +10,8 @@ import UIKit
 import AVFoundation
 
 protocol BHVideoStitcherDelegate {
-    func videoStitcher(stitcher:BHVideoStitcher, didExportVideoToUrl:URL)
-    func videoStitcher(stitcher:BHVideoStitcher, didProduceError:Error)
+    func videoStitcher(stitcher:BHVideoStitcher, didExportVideoToUrl url:URL)
+    func videoStitcher(stitcher:BHVideoStitcher, didProduceError error:Error)
 }
 
 class BHVideoStitcher: NSObject {
@@ -22,12 +22,16 @@ class BHVideoStitcher: NSObject {
         dq.async {
             // build the urls from the uris
             let urls = self.buildUrls(uris: uris)
+            print(urls.count)
             
             // check if the urls are valid
-            let validUrls = self.validateUrls(urls: urls)
+            //let validUrls = self.validateUrls(urls: urls)
+            let validUrls = urls
+            print(validUrls.count)
             
             // create assets from URLs
             let assets = self.buildAssetsFromUrls(validUrls: validUrls)
+            print(assets.count)
             
             // stitch the videos
             self.stitchVideosFromAssets(assets: assets)
@@ -35,11 +39,6 @@ class BHVideoStitcher: NSObject {
     }
 
     // MARK: - Private Functions
-    // Gets the path to a folder in a the documents directory that will be used to hold the videos.
-    private func tempDirectory() -> String {
-        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        return paths[0].appending("/stitcher")
-    }
     
     private func validateUrls(urls:[URL]) -> [URL]{
         var validUrls = [URL]()
@@ -53,6 +52,8 @@ class BHVideoStitcher: NSObject {
             request.httpMethod = "HEAD"
             session.dataTask(with: request, completionHandler: { (data, response, error) in
                 let resp = response as! HTTPURLResponse
+                print(error?.localizedDescription)
+                print(resp.statusCode)
                 if error == nil && resp.statusCode == 200 {
                     validUrls.append(url)
                 }
@@ -88,9 +89,7 @@ class BHVideoStitcher: NSObject {
     private func stitchVideosFromAssets(assets:[AVURLAsset]) {
         var insertTime = kCMTimeZero
         let composition = AVMutableComposition()
-        
-        var outputUrl:URL
-        
+                
         // add assets to composition
         for asset in assets {
             let assetTimeRange = CMTimeRangeMake(kCMTimeZero, asset.duration)
@@ -109,22 +108,26 @@ class BHVideoStitcher: NSObject {
         let exportSession = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetPassthrough)
         
         // set output file and filetype
-        outputUrl = URL(fileURLWithPath: self.tempDirectory().appending("/\(UUID().uuidString).MOV"))
-        exportSession?.outputURL = outputUrl
-        exportSession?.outputFileType = AVFileTypeQuickTimeMovie
+        let op = NSURL(fileURLWithPath: NSTemporaryDirectory().appending("/\(UUID().uuidString).mp4"))
+        exportSession!.outputURL = op as URL
+        exportSession!.outputFileType = AVFileTypeMPEG4
         
         // export the video
         exportSession?.exportAsynchronously(completionHandler: { 
             switch exportSession!.status {
-            case .cancelled: break
+            case .cancelled:
+                print("Cancelled")
+                break
             case .completed:
                 DispatchQueue.main.async {
                     if(self.delegate != nil) {
-                        self.delegate!.videoStitcher(stitcher: self, didExportVideoToUrl: outputUrl)
+                        self.delegate!.videoStitcher(stitcher: self, didExportVideoToUrl: op as URL)
                     }
                 }
                 break
-            case .exporting: break
+            case .exporting:
+                print("Exporting")
+                break
             case .failed:
                 DispatchQueue.main.async {
                     if(self.delegate != nil) {
@@ -132,8 +135,12 @@ class BHVideoStitcher: NSObject {
                     }
                 }
                 break
-            case .unknown: break
-            case .waiting: break
+            case .unknown:
+                print("Unknown")
+                break
+            case .waiting:
+                print("Waiting")
+                break
             }
         })
     }

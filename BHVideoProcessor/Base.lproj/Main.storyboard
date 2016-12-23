@@ -41,21 +41,19 @@
                             <outlet property="delegate" destination="RYx-Y6-WKw" id="RM5-Bh-oaf"/>
                         </connections>
                     </tableView>
-                    <toolbarItems>
-                        <barButtonItem title="Export" style="plain" id="foe-bD-Zez">
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Inputs" id="m8Z-qU-A86">
+                        <barButtonItem key="leftBarButtonItem" title="Export" id="fwp-88-uZE">
                             <connections>
-                                <action selector="beginExport:" destination="RYx-Y6-WKw" id="xhp-vl-gJj"/>
+                                <action selector="exportVideos:" destination="RYx-Y6-WKw" id="uZE-Nd-wmv"/>
                             </connections>
                         </barButtonItem>
-                    </toolbarItems>
-                    <navigationItem key="navigationItem" title="Inputs" id="m8Z-qU-A86">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="WzB-jc-KZZ">
                             <connections>
                                 <action selector="addItem:" destination="RYx-Y6-WKw" id="LoA-sM-a19"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Ck-hG-5Wi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Photos
+import SVProgressHUD
 
 class BHVideoListViewController: UITableViewController {
     
@@ -69,16 +71,30 @@ class BHVideoListViewController: UITableViewController {
         
         self.present(controller, animated: true, completion: nil)
     }
-    @IBAction func beginExport(_ sender: Any) {
+    
+    @IBAction func exportVideos(_ sender: Any) {
+        SVProgressHUD.show()
+        stitcher.stitchVideos(uris: self.assetUrls)
     }
 }
 
 extension BHVideoListViewController : BHVideoStitcherDelegate {
-    func videoStitcher(stitcher: BHVideoStitcher, didProduceError: Error) {
-        
+    func videoStitcher(stitcher: BHVideoStitcher, didProduceError error: Error) {
+        SVProgressHUD.dismiss()
+        print("Got error: \(error.localizedDescription)")
     }
     
-    func videoStitcher(stitcher: BHVideoStitcher, didExportVideoToUrl: URL) {
-        
+    func videoStitcher(stitcher: BHVideoStitcher, didExportVideoToUrl url:URL) {
+        PHPhotoLibrary.shared().performChanges({
+            PHAssetCreationRequest.creationRequestForAssetFromVideo(atFileURL: url)
+        }) { (success, error) in
+            SVProgressHUD.dismiss()
+            if error == nil && success {
+                print("Exported video to photo library.")
+            }
+            else {
+                print("Error saving video to library: \(error?.localizedDescription)")
+            }
+        }
     }
 }

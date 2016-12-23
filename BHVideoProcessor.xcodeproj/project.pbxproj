@@ -219,6 +219,7 @@
 				TargetAttributes = {
 					888D38091E0BB18C0065ED08 = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 2EK7667N9X;
 						ProvisioningStyle = Automatic;
 					};
 					888D381D1E0BB18C0065ED08 = {
@@ -507,7 +508,9 @@
 			baseConfigurationReference = 4D9D8D188AB598A0EE40014E /* Pods-BHVideoProcessor.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 2EK7667N9X;
 				INFOPLIST_FILE = BHVideoProcessor/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.reaperss.BHVideoProcessor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -520,7 +523,9 @@
 			baseConfigurationReference = 286A4E4CD348C4B6F052A566 /* Pods-BHVideoProcessor.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 2EK7667N9X;
 				INFOPLIST_FILE = BHVideoProcessor/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.reaperss.BHVideoProcessor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
