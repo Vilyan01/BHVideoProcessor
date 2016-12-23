@@ -78,7 +78,7 @@ extension BHVideoListViewController : BHVideoStitcherDelegate {
         
     }
     
-    func videoStitcher(stitcher: BHVideoStitcher, didExportVideoToUrl: NSURL) {
+    func videoStitcher(stitcher: BHVideoStitcher, didExportVideoToUrl: URL) {
         
     }
 }
