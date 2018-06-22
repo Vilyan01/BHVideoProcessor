@@ -89,11 +89,10 @@ extension BHVideoListViewController : BHVideoStitcherDelegate {
             PHAssetCreationRequest.creationRequestForAssetFromVideo(atFileURL: url)
         }) { (success, error) in
             SVProgressHUD.dismiss()
-            if error == nil && success {
+            if let err = error {
+                print("Error saving video to library: \(err.localizedDescription)")
+            } else {
                 print("Exported video to photo library.")
-            }
-            else {
-                print("Error saving video to library: \(error?.localizedDescription)")
             }
         }
     }
