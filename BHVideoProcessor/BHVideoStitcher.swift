@@ -51,11 +51,14 @@ class BHVideoStitcher: NSObject {
             var request = URLRequest(url: url)
             request.httpMethod = "HEAD"
             session.dataTask(with: request, completionHandler: { (data, response, error) in
-                let resp = response as! HTTPURLResponse
-                print(error?.localizedDescription)
-                print(resp.statusCode)
-                if error == nil && resp.statusCode == 200 {
-                    validUrls.append(url)
+                if let err = error {
+                    print(err.localizedDescription)
+                }
+                if let resp = response as? HTTPURLResponse {
+                    print(resp.statusCode)
+                    if resp.statusCode == 200 {
+                        validUrls.append(url)
+                    }
                 }
                 validationGroup.leave()
             }).resume()
@@ -110,7 +113,7 @@ class BHVideoStitcher: NSObject {
         // set output file and filetype
         let op = NSURL(fileURLWithPath: NSTemporaryDirectory().appending("/\(UUID().uuidString).mp4"))
         exportSession!.outputURL = op as URL
-        exportSession!.outputFileType = AVFileTypeMPEG4
+        exportSession!.outputFileType = AVFileType.mp4
         exportSession!.shouldOptimizeForNetworkUse = true
         
         // export the video
